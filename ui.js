@@ -4,7 +4,7 @@ const UI = {
     const nav = document.createElement('nav');
     nav.className = 'bottom-nav';
     nav.innerHTML = `
-      <a href="index.html" class="nav-item ${activePage === 'main' ? 'active' : ''}">
+      <a href="index.html" class="nav-item ${activePage === 'index' ? 'active' : ''}">
         <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         Home
       </a>
