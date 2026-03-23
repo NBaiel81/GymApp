@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Planner - Home</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <div class="header">
+      <h1 id="greeting">Hello</h1>
+      <div class="badge">🔥 <span id="streak">0</span> Day Streak</div>
+    </div>
+    
+    <div class="content">
+      <div class="card" style="border: 1px solid var(--accent-green); background: rgba(57, 255, 20, 0.05)">
+        <h2 style="color: var(--accent-green)">Next Up</h2>
+        <p class="mb-md" id="home-next-workout">Checking schedule...</p>
+        <button class="btn btn-primary" id="home-start-btn" onclick="window.location='workout.html'">Start Session</button>
+      </div>
+      
+      <div class="flex-row gap-sm mb-md">
+        <a href="plans.html" class="btn" style="flex:1">My Plans</a>
+        <a href="calendar.html" class="btn" style="flex:1">Calendar</a>
+        <a href="exercises.html" class="btn" style="flex:1">Library</a>
+      </div>
+      
+      <div class="card">
+        <div class="flex-row justify-between mb-sm">
+          <h2>Weekly Overview</h2>
+          <span class="text-secondary" style="font-size:12px">Last 7 Days</span>
+        </div>
+        
+        <div class="flex-row justify-between mb-md mt-md">
+          <div style="text-align:center">
+            <div style="font-size:24px; font-weight:bold; color:var(--accent-blue)" id="wo-count">0</div>
+            <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase">Workouts</div>
+          </div>
+          <div style="width:1px; height:30px; background:var(--border-color)"></div>
+          <div style="text-align:center">
+            <div style="font-size:24px; font-weight:bold; color:var(--accent-green)" id="wo-volume">0</div>
+            <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase">Lbs Lifted</div>
+          </div>
+          <div style="width:1px; height:30px; background:var(--border-color)"></div>
+          <div style="text-align:center">
+            <div style="font-size:24px; font-weight:bold; color:var(--text-primary)" id="wo-time">0m</div>
+            <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase">Active Time</div>
+          </div>
+        </div>
+
+        <div class="flex-row justify-between" id="weekly-dots">
+          <!-- Generated via JS -->
+        </div>
+      </div>
+      
+      <div class="card" style="padding-bottom: 8px;">
+        <h2>Recent Highlights</h2>
+        
+        <div class="workout-row" style="cursor:pointer" onclick="toggleChart('chart-1')">
+          <div style="font-size:24px" id="hl-img">🏋️</div>
+          <div>
+            <strong>Bench Press</strong>
+            <p>135 lbs x 8</p>
+          </div>
+          <div class="text-green text-sm" style="font-weight:bold">+5 lbs</div>
+        </div>
+        
+        <!-- Progress Chart Dropdown -->
+        <div class="chart-card" id="chart-1">
+          <div class="flex-row justify-between mb-sm" style="color:var(--text-secondary)">
+            <div style="font-size:12px; font-weight:bold; display:flex; align-items:center; gap:4px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-blue)"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+              Exercise Progress
+            </div>
+            <div style="font-size:10px">Last 8 weeks</div>
+          </div>
+          
+          <div class="chart-stats">
+            <div class="chart-stat-item">
+              <div class="chart-stat-val" style="color:var(--accent-blue)">135</div>
+              <div class="chart-stat-label">Current (lbs)</div>
+            </div>
+            <div class="chart-stat-item">
+              <div class="chart-stat-val" style="color:var(--accent-green)">+15</div>
+              <div class="chart-stat-label">Progress (lbs)</div>
+            </div>
+            <div class="chart-stat-item">
+              <div class="chart-stat-val" style="color:var(--text-primary)">8</div>
+              <div class="chart-stat-label">Best Reps</div>
+            </div>
+          </div>
+          
+          <!-- Mock SVG Chart styled for dark theme -->
+          <svg class="svg-chart" viewBox="0 0 300 100" preserveAspectRatio="none">
+            <line x1="0" y1="20" x2="300" y2="20" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="50" x2="300" y2="50" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="80" x2="300" y2="80" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+            
+            <path d="M 0 80 L 0 60 L 50 50 L 100 30 L 150 30 L 200 15 L 250 15 L 300 0 L 300 100 L 0 100 Z" fill="rgba(59, 130, 246, 0.2)"></path>
+            
+            <path d="M 0 60 L 50 50 L 100 30 L 150 30 L 200 15 L 250 15 L 300 0" fill="none" stroke="var(--accent-blue)" stroke-width="2"></path>
+            
+            <circle cx="0" cy="60" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="50" cy="50" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="100" cy="30" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="150" cy="30" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="200" cy="15" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="250" cy="15" r="3" fill="var(--accent-blue)"></circle>
+            <circle cx="300" cy="0" r="3" fill="var(--accent-blue)"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = Storage.get();
+      document.getElementById('greeting').innerText = `Hello, ${data.user.name}`;
+      document.getElementById('streak').innerText = data.user.streak;
+      
+      const bench = data.exercises.find(e => e.name === "Bench Press");
+      if(bench && bench.image.startsWith('data:')) {
+        document.getElementById('hl-img').innerHTML = `<img src="${bench.image}" style="width:24px; height:24px; border-radius:4px; object-fit:cover;">`;
+      }
+
+      // Next Workout Logic
+      const todayIso = new Date().toISOString().split('T')[0];
+      const todaySched = (data.schedule || {})[todayIso];
+      
+      if(todaySched && todaySched.status === 'upcoming') {
+         const plan = data.plans.find(p => p.id === todaySched.planId);
+         if(plan) {
+            const session = plan.sessions[todaySched.sessionIndex];
+            document.getElementById('home-next-workout').innerHTML = `<strong>${plan.title}</strong><br>${session.name}`;
+            document.getElementById('home-start-btn').onclick = () => window.location = `workout.html?date=${todayIso}`;
+         }
+      } else {
+         document.getElementById('home-next-workout').innerHTML = `No workout scheduled for today.`;
+         document.getElementById('home-start-btn').innerText = `Schedule One`;
+         document.getElementById('home-start-btn').onclick = () => window.location = `calendar.html`;
+      }
+
+      // Weekly Overview Logic (Mocked stats based on schedule history)
+      const dayNames = ['S','M','T','W','T','F','S'];
+      let dotsHtml = '';
+      let completedCount = 0;
+
+      for(let i=6; i>=0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const iso = d.toISOString().split('T')[0];
+        const sched = (data.schedule || {})[iso];
+        
+        let color = 'var(--surface-color-light)';
+        let char = '➖';
+        if(sched) {
+          if(sched.status === 'completed') { color = 'var(--accent-blue)'; char = '✅'; completedCount++; }
+          else if(sched.status === 'skipped') { color = 'var(--accent-red)'; char = '✕'; }
+          else if(sched.status === 'upcoming') { color = 'var(--accent-green)'; char = '📅'; }
+        }
+
+        dotsHtml += `
+          <div style="text-align:center">
+            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:4px">${dayNames[d.getDay()]}</div>
+            <div style="width:28px; height:28px; border-radius:50%; background:${color}; display:flex; align-items:center; justify-content:center; font-size:12px; color:${color==='var(--surface-color-light)'?'var(--text-secondary)':'black'}">
+               ${char}
+            </div>
+          </div>
+        `;
+      }
+      document.getElementById('weekly-dots').innerHTML = dotsHtml;
+      
+      // Update mock counts to make it look alive
+      document.getElementById('wo-count').innerText = completedCount;
+      document.getElementById('wo-volume').innerText = (completedCount * 4500).toLocaleString();
+      document.getElementById('wo-time').innerText = (completedCount * 45) + 'm';
+
+      UI.renderBottomNav('main');
+    });
+
+    function toggleChart(id) {
+      const el = document.getElementById(id);
+      if(el.classList.contains('active')) {
+        el.classList.remove('active');
+      } else {
+        el.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

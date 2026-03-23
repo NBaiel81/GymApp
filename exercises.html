@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Planner - Exercises</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <div class="header">
+      <a href="javascript:history.back()" class="btn-icon text-center">←</a>
+      <h2 style="margin:0">Library</h2>
+      <button class="btn btn-primary" style="width:auto; padding:8px 16px" onclick="openExerciseModal()">+ New</button>
+    </div>
+    
+    <div class="content">
+      <div class="input-group">
+        <input type="text" id="search-input" class="input" placeholder="Search exercises..." onkeyup="filterList()">
+      </div>
+      
+      <div id="exercise-list"></div>
+    </div>
+    
+    <!-- Custom Exercise Modal (Bottom Sheet style) -->
+    <div class="modal-overlay bottom-sheet" id="custom-modal">
+      <div class="modal-content" style="background:var(--bg-color); color:var(--text-primary); height:90vh; display:flex; flex-direction:column; padding:0">
+        
+        <div class="header" style="padding:20px; background:var(--bg-color); border-bottom:1px solid var(--border-color); border-radius: 24px 24px 0 0; position:sticky; top:0;">
+          <h2 style="margin:0" id="modal-title">New Exercise</h2>
+          <button class="btn" style="width:auto; padding:6px 12px; font-size:12px; background:var(--surface-color-light)" onclick="closeModal()">Close</button>
+        </div>
+        
+        <div style="padding:20px; overflow-y:auto; flex:1">
+          <input type="hidden" id="ce-id" value="">
+          
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" id="ce-name" class="input" placeholder="e.g. Ring Muscle Up">
+          </div>
+          
+          <div class="input-group">
+            <label>Primary Muscle</label>
+            <input type="text" id="ce-muscle" class="input" placeholder="e.g. Back/Chest">
+          </div>
+
+          <div class="flex-row gap-sm">
+            <div class="input-group" style="flex:1">
+              <label>Default Sets</label>
+              <input type="number" id="ce-sets" class="input" value="3">
+            </div>
+            <div class="input-group" style="flex:1">
+              <label>Default Reps</label>
+              <input type="number" id="ce-reps" class="input" value="10">
+            </div>
+            <div class="input-group" style="flex:1">
+              <label>Default Wt(lbs)</label>
+              <input type="number" id="ce-weight" class="input" value="0">
+            </div>
+          </div>
+          
+          <!-- Image Upload Area -->
+          <div style="margin-top: 12px; margin-bottom: 24px;">
+            <label style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display:block;">Image</label>
+            <div class="image-upload-box" id="img-upload-box" onclick="document.getElementById('ce-image-input').click()">
+              <span>Add picture</span>
+            </div>
+            <input type="file" id="ce-image-input" style="display:none" accept="image/*" onchange="previewImage(event)">
+          </div>
+          
+          <div class="flex-row gap-sm mb-md">
+            <button class="btn btn-primary" style="flex:2" onclick="saveCustom()">Save Exercise</button>
+            <button class="btn" style="flex:1; background:rgba(239, 68, 68, 0.1); color:var(--accent-red); border:1px solid var(--accent-red); display:none" id="delete-btn" onclick="deleteExercise()">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let currentImageBase64 = null;
+    let exercises = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      exercises = Storage.get().exercises;
+      renderList(exercises);
+    });
+
+    function filterList() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const filtered = exercises.filter(e => e.name.toLowerCase().includes(q) || e.primaryMuscle.toLowerCase().includes(q));
+      renderList(filtered);
+    }
+    
+    function renderList(listToRender) {
+      const list = document.getElementById('exercise-list');
+      list.innerHTML = '';
+      listToRender.forEach(ex => {
+        const div = document.createElement('div');
+        div.className = 'card flex-row justify-between align-center';
+        
+        let imgHtml = `<div style="font-size:24px; margin-right:12px; min-width:30px; text-align:center">${ex.image}</div>`;
+        if (ex.image && ex.image.startsWith('data:')) {
+           imgHtml = `<img src="${ex.image}" style="width:40px; height:40px; border-radius:8px; object-fit:cover; margin-right:12px">`;
+        }
+
+        div.innerHTML = `
+          <div class="flex-row" style="flex:1">
+            ${imgHtml}
+            <div>
+              <strong style="color:var(--text-primary)">${ex.name}</strong>
+              <p style="font-size:12px; color:var(--text-secondary)">${ex.primaryMuscle} • ${ex.defaultSets}x${ex.defaultReps} @ ${ex.defaultWeight}lbs</p>
+            </div>
+          </div>
+          <div class="flex-row gap-sm">
+            <button class="btn-icon" style="background:var(--surface-color-light); width:32px; height:32px; font-size:14px" onclick="openExerciseModal('${ex.id}')" title="Edit">✏️</button>
+            <button class="btn btn-primary" style="width:auto; padding:6px 12px; font-size:12px;" onclick="selectForPlan('${ex.id}')">Select</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function selectForPlan(id) {
+       UI.toast('Selected!');
+       setTimeout(()=>history.back(), 500);
+    }
+
+    function openExerciseModal(id = null) {
+      document.getElementById('custom-modal').classList.add('active');
+      
+      const delBtn = document.getElementById('delete-btn');
+      
+      if(id) {
+        document.getElementById('modal-title').innerText = "Edit Exercise";
+        const ex = exercises.find(e => e.id === id);
+        document.getElementById('ce-id').value = ex.id;
+        document.getElementById('ce-name').value = ex.name;
+        document.getElementById('ce-muscle').value = ex.primaryMuscle;
+        document.getElementById('ce-sets').value = ex.defaultSets || 3;
+        document.getElementById('ce-reps').value = ex.defaultReps || 10;
+        document.getElementById('ce-weight').value = ex.defaultWeight || 0;
+        
+        if (ex.image && ex.image.startsWith('data:')) {
+           currentImageBase64 = ex.image;
+           const box = document.getElementById('img-upload-box');
+           box.style.backgroundImage = `url(${currentImageBase64})`;
+           box.classList.add('has-image');
+        } else {
+           currentImageBase64 = ex.image; // emoji
+           resetImageUpload();
+        }
+        delBtn.style.display = 'block';
+      } else {
+        document.getElementById('modal-title').innerText = "New Exercise";
+        document.getElementById('ce-id').value = '';
+        document.getElementById('ce-name').value = '';
+        document.getElementById('ce-muscle').value = '';
+        document.getElementById('ce-sets').value = '3';
+        document.getElementById('ce-reps').value = '10';
+        document.getElementById('ce-weight').value = '0';
+        resetImageUpload();
+        delBtn.style.display = 'none';
+      }
+    }
+
+    function resetImageUpload() {
+      currentImageBase64 = null;
+      const box = document.getElementById('img-upload-box');
+      box.style.backgroundImage = 'none';
+      box.classList.remove('has-image');
+    }
+
+    function closeModal() {
+      document.getElementById('custom-modal').classList.remove('active');
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentImageBase64 = e.target.result;
+          const box = document.getElementById('img-upload-box');
+          box.style.backgroundImage = `url(${currentImageBase64})`;
+          box.classList.add('has-image');
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    function saveCustom() {
+      const id = document.getElementById('ce-id').value;
+      const name = document.getElementById('ce-name').value;
+      const muscle = document.getElementById('ce-muscle').value;
+      const sets = parseInt(document.getElementById('ce-sets').value) || 3;
+      const reps = parseInt(document.getElementById('ce-reps').value) || 10;
+      const weight = parseInt(document.getElementById('ce-weight').value) || 0;
+      
+      if (!name) return;
+      
+      const data = Storage.get();
+      
+      if (id) {
+         // Update
+         const idx = data.exercises.findIndex(e => e.id === id);
+         if(idx !== -1) {
+            data.exercises[idx].name = name;
+            data.exercises[idx].primaryMuscle = muscle || 'Full Body';
+            data.exercises[idx].defaultSets = sets;
+            data.exercises[idx].defaultReps = reps;
+            data.exercises[idx].defaultWeight = weight;
+            data.exercises[idx].image = currentImageBase64 || data.exercises[idx].image;
+         }
+         UI.toast('Exercise updated');
+      } else {
+         // Create
+         data.exercises.unshift({
+           id: 'e' + Date.now(),
+           name,
+           primaryMuscle: muscle || 'Full Body',
+           category: 'custom',
+           equipment: 'Custom',
+           defaultSets: sets,
+           defaultReps: reps,
+           defaultWeight: weight,
+           image: currentImageBase64 || '✨' 
+         });
+         UI.toast('Exercise added');
+      }
+      
+      Storage.save();
+      exercises = data.exercises;
+      filterList();
+      closeModal();
+    }
+
+    function deleteExercise() {
+      if(!confirm("Are you sure you want to delete this exercise?")) return;
+      const id = document.getElementById('ce-id').value;
+      if(!id) return;
+      
+      const data = Storage.get();
+      data.exercises = data.exercises.filter(e => e.id !== id);
+      Storage.save();
+      
+      exercises = data.exercises;
+      filterList();
+      closeModal();
+      UI.toast('Exercise deleted');
+    }
+  </script>
+</body>
+</html>

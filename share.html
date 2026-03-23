@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Planner - Share</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <div class="header">
+      <a href="plans.html" class="btn btn-icon">←</a>
+      <h2 style="margin:0">Share Plan</h2>
+      <div style="width:40px"></div>
+    </div>
+    
+    <div class="content">
+      <div class="card" style="text-align:center; padding: 32px 16px;">
+        <div style="font-size:48px; margin-bottom:16px;">📤</div>
+        <h2>Share Template</h2>
+        <p class="mt-md mb-md text-secondary">Your personal history and weights will NOT be shared. Only the structure and custom exercises will be exported.</p>
+        
+        <div style="background:var(--bg-color); padding:16px; border-radius:var(--radius-md); margin-bottom:24px; font-family:monospace; color:var(--accent-green); overflow-x:auto; border: 1px dashed var(--accent-green)">
+          gymapp://share/x8f9a2p
+        </div>
+        
+        <button class="btn btn-primary" style="width:100%" onclick="UI.toast('Link Copied to Clipboard!')">Copy Link</button>
+      </div>
+      
+      <div class="card mt-md">
+        <h2 class="mb-md">Import Template</h2>
+        <p class="mb-md text-secondary">Paste a friend's code below to add their workout structure to your plans.</p>
+        <div class="input-group">
+          <input type="text" class="input" placeholder="gymapp://...">
+        </div>
+        <button class="btn" style="width:100%" onclick="UI.toast('Template Imported Successfully!')">Import Template</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

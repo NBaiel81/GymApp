@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Planner - Progress</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    <div class="header">
+      <h1 style="margin:0">Progress</h1>
+    </div>
+    
+    <div class="content">
+      <div class="flex-row gap-sm mb-md">
+        <div class="card" style="flex:1; text-align:center; margin:0">
+          <div style="font-size:32px; font-weight:bold; color:var(--accent-green)">12</div>
+          <p>Workouts</p>
+        </div>
+        <div class="card" style="flex:1; text-align:center; margin:0">
+          <div style="font-size:32px; font-weight:bold; color:var(--accent-blue)">3</div>
+          <p>Week Streak</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Recent Personal Bests</h2>
+        <div class="workout-row mt-md">
+          <div style="font-size:24px">🏋️</div>
+          <div>
+            <strong>Bench Press</strong>
+            <p>225 lbs x 5 reps</p>
+          </div>
+          <div class="badge" style="background:var(--accent-green); color:black">NEW</div>
+        </div>
+        <div class="workout-row">
+          <div style="font-size:24px">🧘</div>
+          <div>
+            <strong>Plank</strong>
+            <p>120 seconds</p>
+          </div>
+          <div class="badge" style="background:var(--accent-green); color:black">NEW</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Consistency</h2>
+        <div style="height:120px; display:flex; align-items:flex-end; gap:8px; margin-top:24px;">
+          <div style="flex:1; background:var(--surface-color-light); height:30%; border-radius:4px"></div>
+          <div style="flex:1; background:var(--surface-color-light); height:50%; border-radius:4px"></div>
+          <div style="flex:1; background:var(--accent-green); height:80%; border-radius:4px; position:relative">
+            <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-size:10px">8</div>
+          </div>
+          <div style="flex:1; background:var(--surface-color-light); height:40%; border-radius:4px"></div>
+          <div style="flex:1; background:var(--accent-blue); height:100%; border-radius:4px; position:relative">
+            <div style="position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--accent-blue)">12</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:12px; color:var(--text-secondary); font-size:12px">
+          <span>Week 1</span>
+          <span>Week 5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      UI.renderBottomNav('progress');
+    });
+  </script>
+</body>
+</html>
